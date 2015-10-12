@@ -1,6 +1,8 @@
 import musicbrainzngs as mb
 import eyed3
 
+mb.set_useragent("Makam corpus metadata", "0.1", "compmusic.upf.edu")
+
 def getAudioMetadata(audioIn):
     try:  # audio file input
     	mbid, duration, sampling_frequency, bit_rate = getFileMetadata(audioIn)
