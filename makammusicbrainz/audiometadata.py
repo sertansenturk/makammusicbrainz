@@ -2,26 +2,23 @@ import musicbrainzngs as mb
 import eyed3
 
 def getAudioMetadata(audioIn):
-    try:  # mp3 input
-    	audiofile = eyed3.load(audio_files[i])
-        mbid = audiofile.tag.unique_file_ids.get(
-            'http://musicbrainz.org').data[-36:]
+    try:  # audio file input
+    	mbid, duration, sampling_frequency, bit_rate = getFileMetadata(audioIn)
+        audioMetadata = {'mbid':mbid, 'path':audioIn, 'duration':duration, 
+            'sampling_frequency':sampling_frequency, 'bit_rate':bit_rate}
     except IOError:
-        mbid = audioIn
+        audioMetadata = {'mbid':mbid}
 
-    meta = mb.get_recording_by_id(mbid, includes=['artist-rels',
-        'tags','releases','work-rels'])['recording']
+    meta = mb.get_recording_by_id(audioMetadata['mbid'], 
+        includes=['artist-rels','tags','releases','work-rels'])['recording']
+    audioMetadata['title'] = meta['title']
 
     # releases
-    releases = getReleases(meta)
+    audioMetadata['releases'] = getReleases(meta)
 
     # performers
-    artists = getArtistRelations(meta)
+    audioMetadata['artists'] = getArtistRelations(meta)
 
-    audioMetadata = {'title':meta['title'],'path':audio_files[i],
-                     'mbid':mbid,'duration':audiofile.info.time_secs,
-                     'releases':releases,'artists':artists}
-    
     # works 
     if 'work-relation-list' in meta.keys():  # has work
         audioMetadata['works'] = getWorks(meta)
@@ -32,6 +29,15 @@ def getAudioMetadata(audioIn):
 
     return audioMetadata
 
+def getFileMetadata(file):
+    audiofile = eyed3.load(file)
+    mbid = audiofile.tag.unique_file_ids.get('http://musicbrainz.org').data[-36:]
+    duration = audiofile.info.time_secs
+    sampling_frequency = audiofile.info.sample_freq  
+    bit_rate = audiofile.info.mp3_header.bit_rate
+
+    return mbid, duration, sampling_frequency, bit_rate
+
 def getReleases(meta):
     return [{'title':rel['title'], 'mbid':rel['id']} for rel in meta['release-list']]
 
@@ -40,8 +46,7 @@ def getArtistRelations(meta):
     if 'artist-relation-list' in meta.keys():
         for artist in meta['artist-relation-list']:
             artists.append({'name':artist['artist']['name'], 
-                          'mbid':artist['artist']['id'],
-                          'type':artist['type']})
+                'mbid':artist['artist']['id'],'type':artist['type']})
             if (artist['type'] in ['vocal', 'instrument'] and 
                'attribute-list' in artist.keys()):
                 artists[-1]['attribute-list'] = artist['attribute-list']
@@ -62,5 +67,5 @@ def getAttributes(meta):
                         attributes [key] = []
                     attributes[key].append({'name':val})
             except ValueError:
-                pass
+                pass  # skip
     return attributes
