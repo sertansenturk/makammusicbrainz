@@ -1,6 +1,5 @@
 import musicbrainzngs as mb
 import eyed3
-
 mb.set_useragent("Makam corpus metadata", "0.1", "compmusic.upf.edu")
 
 def getAudioMetadata(audioIn):
@@ -12,11 +11,15 @@ def getAudioMetadata(audioIn):
         audioMetadata = {'mbid':mbid}
 
     meta = mb.get_recording_by_id(audioMetadata['mbid'], 
-        includes=['artist-rels','tags','releases','work-rels'])['recording']
+        includes=['artists','artist-rels','tags','releases','work-rels']
+        )['recording']
     audioMetadata['title'] = meta['title']
 
     # releases
     audioMetadata['releases'] = getReleases(meta)
+
+    # artist credits
+    audioMetadata['artists_credits'] = getArtistCredits(meta)
 
     # performers
     audioMetadata['artists'] = getArtistRelations(meta)
@@ -43,6 +46,14 @@ def getFileMetadata(file):
 def getReleases(meta):
     return [{'title':rel['title'], 'mbid':rel['id']} for rel in meta['release-list']]
 
+def getArtistCredits(meta):
+    credits = []
+    for credit in meta['artist-credit']:
+        credits.append({'name':credit['artist']['name'],
+            'mbid':credit['artist']['id']})
+
+    return credits
+
 def getArtistRelations(meta):
     artists = []
     if 'artist-relation-list' in meta.keys():
@@ -59,15 +70,17 @@ def getWorks(meta):
         for work in meta['work-relation-list']])
 
 def getAttributes(meta):
+    theory_attribute_keys = ['makam', 'form', 'usul']
     attributes = dict()
     if 'tag-list' in meta.keys():
         for t in meta['tag-list']:  # no work get attrs from the tags
             try:
                 key, val = t['name'].split(': ')
-                if any(k in key for k in ['makam', 'form', 'usul']):
-                    if not key in attributes .keys():
-                        attributes [key] = []
-                    attributes[key].append({'name':val})
+                for k in theory_attribute_keys:
+                    if k in key:
+                        if not k in attributes.keys():
+                            attributes[k] = []
+                        attributes[k].append({'name':val})
             except ValueError:
                 pass  # skip
     return attributes
