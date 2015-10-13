@@ -19,7 +19,7 @@ def getAudioMetadata(audioIn):
     audioMetadata['releases'] = getReleases(meta)
 
     # artist credits
-    audioMetadata['artists_credits'] = getArtistCredits(meta)
+    audioMetadata['artist_credits'] = getArtistCredits(meta)
 
     # performers
     audioMetadata['artists'] = getArtistRelations(meta)
@@ -49,8 +49,11 @@ def getReleases(meta):
 def getArtistCredits(meta):
     credits = []
     for credit in meta['artist-credit']:
-        credits.append({'name':credit['artist']['name'],
-            'mbid':credit['artist']['id']})
+        try:
+            credits.append({'name':credit['artist']['name'],
+                'mbid':credit['artist']['id']})
+        except TypeError:
+            pass  # skip join phrase
 
     return credits
 
