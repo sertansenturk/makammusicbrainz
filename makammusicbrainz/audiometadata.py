@@ -1,10 +1,11 @@
-import musicbrainzngs as mb
 import eyed3
+
+import musicbrainzngs as mb
 mb.set_useragent("Makam corpus metadata", "0.1", "compmusic.upf.edu")
 
 def getAudioMetadata(audioIn):
     try:  # audio file input
-    	mbid, duration, sampling_frequency, bit_rate = getFileMetadata(audioIn)
+        mbid, duration, sampling_frequency, bit_rate = getFileMetadata(audioIn)
         audioMetadata = {'mbid':mbid, 'path':audioIn, 'duration':duration, 
             'sampling_frequency':sampling_frequency, 'bit_rate':bit_rate}
     except IOError:
@@ -24,13 +25,10 @@ def getAudioMetadata(audioIn):
     # performers
     audioMetadata['artists'] = getArtistRelations(meta)
 
-    # works 
-    if 'work-relation-list' in meta.keys():  # has work
-        audioMetadata['works'] = getWorks(meta)
-    else:   # no works, most likely improvisation get makam/form/usul attributes
-        attributes = getAttributes(meta)
-        for key, vals in attributes.iteritems():
-            audioMetadata[key] = vals
+    # get makam/usul/for tags
+    attributes = getAttributeTags(meta)
+    for key, vals in attributes.iteritems():
+        audioMetadata[key] = vals
 
     return audioMetadata
 
@@ -72,7 +70,7 @@ def getWorks(meta):
     return ([{'title':work['work']['title'], 'mbid':work['work']['id']} 
         for work in meta['work-relation-list']])
 
-def getAttributes(meta):
+def getAttributeTags(meta):
     theory_attribute_keys = ['makam', 'form', 'usul']
     attributes = dict()
     if 'tag-list' in meta.keys():
@@ -83,7 +81,7 @@ def getAttributes(meta):
                     if k in key:
                         if not k in attributes.keys():
                             attributes[k] = []
-                        attributes[k].append({'name':val})
+                        attributes[k].append({'mb_tag':val})
             except ValueError:
                 pass  # skip
     return attributes
