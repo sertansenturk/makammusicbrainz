@@ -25,6 +25,10 @@ def getAudioMetadata(audioIn):
     # performers
     audioMetadata['artists'] = getArtistRelations(meta)
 
+    # works
+    if 'work-relation-list' in meta.keys():  # has work
+        audioMetadata['works'] = getWorks(meta)
+
     # get makam/usul/for tags
     attributes = getAttributeTags(meta)
     for key, vals in attributes.iteritems():
