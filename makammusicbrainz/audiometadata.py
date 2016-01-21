@@ -25,6 +25,9 @@ def getAudioMetadata(audioIn):
     # performers
     audioMetadata['artists'] = getArtistRelations(meta)
 
+    import pdb
+    pdb.set_trace()
+    
     # works
     if 'work-relation-list' in meta.keys():  # has work
         audioMetadata['works'] = getWorks(meta)

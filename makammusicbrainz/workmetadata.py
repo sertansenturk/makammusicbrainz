@@ -53,4 +53,26 @@ def getWorkMetadata(mbid):
         if sw['uuid']['mbid'] == mbid:
             data['scores'].append(sw['name'])
 
+    # warnings
+    if not data['makam' ]:
+        print 'http://musicbrainz.org/work/' + data['mbid'] + ' Makam is not entered!'
+    if not data['form']:
+        print 'http://musicbrainz.org/work/' + data['mbid'] + ' Form is not entered!'
+    if not data['usul']:
+        print 'http://musicbrainz.org/work/' + data['mbid'] + ' Usul is not entered!'
+    if not data['composer']:
+        print 'http://musicbrainz.org/work/' + data['mbid'] + ' Composer is not entered!'
+    if 'language' not in data.keys():
+        if not data['lyricist']:
+            print 'http://musicbrainz.org/work/' + data['mbid'] + ' Language is not entered!'
+        else:
+            print 'http://musicbrainz.org/work/' + data['mbid'] + ' Language of the vocal work is not entered!'
+    else:
+        if data['language'] == "zxx":  # no lyics
+            if data['lyricist']:
+                print 'http://musicbrainz.org/work/' + data['mbid'] + ' Lyricist is entered to the instrumental work!'
+        else:
+            if not data['lyricist']:
+                print 'http://musicbrainz.org/work/' + data['mbid'] + ' Lyricist is not entered!'
+
     return data
