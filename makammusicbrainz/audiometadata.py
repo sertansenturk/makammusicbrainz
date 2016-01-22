@@ -1,9 +1,12 @@
 import eyed3
 
+from attribute import *
+from workmetadata import getWorkMetadata
+
 import musicbrainzngs as mb
 mb.set_useragent("Makam corpus metadata", "0.1", "compmusic.upf.edu")
 
-def getAudioMetadata(audioIn):
+def getAudioMetadata(audioIn, getWorkAttributes = None):
     try:  # audio file input
         mbid, duration, sampling_frequency, bit_rate = getFileMetadata(audioIn)
         audioMetadata = {'mbid':mbid, 'path':audioIn, 'duration':duration, 
@@ -24,18 +27,37 @@ def getAudioMetadata(audioIn):
 
     # performers
     audioMetadata['artists'] = getArtistRelations(meta)
-
-    import pdb
-    pdb.set_trace()
     
     # works
     if 'work-relation-list' in meta.keys():  # has work
         audioMetadata['works'] = getWorks(meta)
 
+    # get makam/usul/for from work attributes
+    if getWorkAttributes and 'works' in audioMetadata.keys():
+        attribute_keys = ['makam', 'form', 'usul']
+        for w in audioMetadata['works']:
+            workMetadata = getWorkMetadata(w['mbid'])
+            for ak in attribute_keys:
+                for wm in workMetadata[ak]:  # add the source
+                    wm['source'] = 'http://musicbrainz.org/work/' + w['mbid']
+
+                if ak not in audioMetadata.keys():
+                    audioMetadata[ak] = workMetadata[ak]
+                else:
+                    for wm in workMetadata[ak]:
+                        audioMetadata[ak].append(wm)
+
     # get makam/usul/for tags
-    attributes = getAttributeTags(meta)
-    for key, vals in attributes.iteritems():
-        audioMetadata[key] = vals
+    attributetags = getAttributeTags(meta)
+    for key, vals in attributetags.iteritems():
+        for val in vals:  # add the source
+            val['source'] = 'http://musicbrainz.org/recording/' + mbid
+
+        if key not in audioMetadata.keys():
+            audioMetadata[key] = vals
+        else:
+            for val in vals:
+                audioMetadata[key].append(val)
 
     return audioMetadata
 
@@ -76,19 +98,3 @@ def getArtistRelations(meta):
 def getWorks(meta):
     return ([{'title':work['work']['title'], 'mbid':work['work']['id']} 
         for work in meta['work-relation-list']])
-
-def getAttributeTags(meta):
-    theory_attribute_keys = ['makam', 'form', 'usul']
-    attributes = dict()
-    if 'tag-list' in meta.keys():
-        for t in meta['tag-list']:  # no work get attrs from the tags
-            try:
-                key, val = t['name'].split(': ')
-                for k in theory_attribute_keys:
-                    if k in key:
-                        if not k in attributes.keys():
-                            attributes[k] = []
-                        attributes[k].append({'mb_tag':val})
-            except ValueError:
-                pass  # skip
-    return attributes
