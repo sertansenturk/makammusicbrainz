@@ -1,4 +1,4 @@
-# makamusicbrainz
+# makammusicbrainz
 Packages to fetch metadata related to the makam music recordings and works from MusicBrainz
 
 Usage
