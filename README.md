@@ -1,5 +1,17 @@
-# makammetadata
-Packages to fetch metadata related to the CompMusic makam corpus from MusicBrainz
+# makamusicbrainz
+Packages to fetch metadata related to the makam music recordings and works from MusicBrainz
+
+Usage
+============
+```python
+from makammusicbrainz.audiometadata import getAudioMetadata
+audio_meta = getAudioMetadata(mp3file, getWorkAttributes=True)
+
+from makammusicbrainz.workmetadata import getWorkMetadata
+work_meta = getWorkMetadata(work_mbid)
+```
+
+Please refer to [demo.ipynb](https://github.com/sertansenturk/makammusicbrainz/blob/master/demo.ipynb) for an interactive demo.
 
 Installation
 ============
@@ -23,3 +35,7 @@ Authors
 -------
 Sertan Senturk
 contact@sertansenturk.com
+
+Acknowledgements
+------
+We would like to thank Dr. Robert Grafias for allowing us to use [his makam music collection](https://eee.uci.edu/programs/rgarfias/films.html) in our research (in this repository the recording with MBID: [635530df-8e13-4587-a94d-32f3c1643ca6](http://musicbrainz.org/recording/635530df-8e13-4587-a94d-32f3c1643ca6)).
