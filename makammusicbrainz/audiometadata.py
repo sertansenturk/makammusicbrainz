@@ -38,9 +38,6 @@ def getAudioMetadata(audioIn, getWorkAttributes = None):
         for w in audioMetadata['works']:
             workMetadata = getWorkMetadata(w['mbid'])
             for ak in attribute_keys:
-                for wm in workMetadata[ak]:  # add the source
-                    wm['source'] = 'http://musicbrainz.org/work/' + w['mbid']
-
                 if ak not in audioMetadata.keys():
                     audioMetadata[ak] = workMetadata[ak]
                 else:

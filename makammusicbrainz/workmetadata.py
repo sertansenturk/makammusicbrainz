@@ -18,16 +18,16 @@ def getWorkMetadata(mbid, print_warnings=None):
         w_attrb = work['attribute-list']
 
         makam = [a['attribute'] for a in w_attrb if 'Makam' in a['type']]
-        data['makam'] = [{'mb_attribute': m, 'attribute_key':getAttributeKeyFromMbAttr(m, 'makam')}
-            for m in makam]
+        data['makam'] = [{'mb_attribute': m, 'attribute_key':getAttributeKeyFromMbAttr(m, 'makam'),
+            'source':'http://musicbrainz.org/work/' + mbid} for m in makam]
 
         form = [a['attribute'] for a in w_attrb if 'Form' in a['type']]
-        data['form'] = [{'mb_attribute': f, 'attribute_key':getAttributeKeyFromMbAttr(f, 'form')}
-            for f in form]
+        data['form'] = [{'mb_attribute': f, 'attribute_key':getAttributeKeyFromMbAttr(f, 'form'),
+            'source':'http://musicbrainz.org/work/' + mbid} for f in form]
 
         usul = [a['attribute'] for a in w_attrb if 'Usul' in a['type']]
-        data['usul'] = [{'mb_attribute': u, 'attribute_key':getAttributeKeyFromMbAttr(u, 'usul')}
-            for u in usul]
+        data['usul'] = [{'mb_attribute': u, 'attribute_key':getAttributeKeyFromMbAttr(u, 'usul'),
+            'source':'http://musicbrainz.org/work/' + mbid} for u in usul]
 
     # language
     if 'language' in work.keys():
