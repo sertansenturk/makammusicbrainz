@@ -54,7 +54,7 @@ def getWorkMetadata(mbid, print_warnings=None):
     score_work = json.load(open(score_work_file, 'r'))
     data['scores'] = [] 
     for sw in score_work:
-        if sw['uuid']['mbid'] == mbid:
+        if mbid in sw['uuid']:
             data['scores'].append(sw['name'])
 
     # warnings
