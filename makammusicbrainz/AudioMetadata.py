@@ -1,6 +1,6 @@
 import eyed3
 from attribute import Attribute
-from workmetadata import WorkMetadata
+from WorkMetadata import WorkMetadata
 
 import musicbrainzngs as mb
 mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
