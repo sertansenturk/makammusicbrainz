@@ -1,4 +1,4 @@
-from attribute import Attribute
+from AttributeOperations import Attribute
 import os
 import json
 

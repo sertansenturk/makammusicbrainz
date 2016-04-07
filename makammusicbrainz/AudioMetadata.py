@@ -1,5 +1,5 @@
 import eyed3
-from attribute import Attribute
+from AttributeOperations import Attribute
 from WorkMetadata import WorkMetadata
 
 import musicbrainzngs as mb
