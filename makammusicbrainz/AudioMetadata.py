@@ -40,23 +40,27 @@ class AudioMetadata(object):
 
         # get makam/usul/for from work attributes
         if get_work_attributes and 'works' in audio_meta.keys():
-            workMetadata = WorkMetadata(print_warnings=self.print_warnings)
-            attribute_keys = ['makam', 'form', 'usul']
-            for w in audio_meta['works']:
-                work_metadata = workMetadata.from_musicbrainz(w['mbid'])
-                for ak in attribute_keys:
-                    if ak not in audio_meta.keys():
-                        audio_meta[ak] = work_metadata[ak]
-                    else:
-                        for wm in work_metadata[ak]:
-                            audio_meta[ak].append(wm)
+            self._get_attributes_from_works(audio_meta)
 
         # get makam/usul/for tags
         self._get_recording_attribute_tags(audio_meta, meta)
 
         return audio_meta
 
-    def _get_recording_attribute_tags(self, audio_meta, meta):
+    def _get_attributes_from_works(self, audio_meta):
+        workMetadata = WorkMetadata(print_warnings=self.print_warnings)
+        attribute_keys = ['makam', 'form', 'usul']
+        for w in audio_meta['works']:
+            work_metadata = workMetadata.from_musicbrainz(w['mbid'])
+            for ak in attribute_keys:
+                if ak not in audio_meta.keys():
+                    audio_meta[ak] = work_metadata[ak]
+                else:
+                    for wm in work_metadata[ak]:
+                        audio_meta[ak].append(wm)
+
+    @staticmethod
+    def _get_recording_attribute_tags(audio_meta, meta):
         attributetags = Attribute.get_attrib_tags(meta)
         for key, vals in attributetags.iteritems():
             for val in vals:  # add the source
