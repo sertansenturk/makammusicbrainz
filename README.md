@@ -6,11 +6,20 @@ Packages to fetch metadata related to the makam music recordings and works from 
 Usage
 ============
 ```python
-from makammusicbrainz.audiometadata import getAudioMetadata
-audio_meta = getAudioMetadata(mp3file, getWorkAttributes=True)
+# audio metadata
+from makammusicbrainz.AudioMetadata import AudioMetadata
+audioMetadata = AudioMetadata(get_work_attributes=True, print_warnings=True)
 
-from makammusicbrainz.workmetadata import getWorkMetadata
-work_meta = getWorkMetadata(work_mbid)
+audio_meta = audioMetadata.from_musicbrainz(rec_input)
+```
+You can either supply recording MBID or recording filepath as the `rec_input`
+
+```python
+# work metadata 
+from makammusicbrainz.WorkMetadata import WorkMetadata
+workMetadata = WorkMetadata(print_warnings=True)
+
+work_meta = workMetadata.from_musicbrainz(mbid)
 ```
 
 Please refer to [demo.ipynb](https://github.com/sertansenturk/makammusicbrainz/blob/master/demo.ipynb) for an interactive demo.
@@ -18,7 +27,7 @@ Please refer to [demo.ipynb](https://github.com/sertansenturk/makammusicbrainz/b
 Installation
 ============
 
-If you want to install makammetadata, it is recommended to install makammetadata and dependencies into a virtualenv. In the terminal, do the following:
+If you want to install makamusicbrainz, it is recommended to install makammetadata and dependencies into a virtualenv. In the terminal, do the following:
 
     virtualenv env
     source env/bin/activate
