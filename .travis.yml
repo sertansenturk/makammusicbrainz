@@ -6,6 +6,9 @@ python:
 #  - "3.4"
 #  - "3.5"
 
+before_install:
+  - pip install codecov
+
 # command to install dependencies
 install:
   - pip install -r requirements
@@ -18,3 +21,6 @@ before_script:
 # command to run tests
 script:
   - nosetests makammusicbrainz/unittests --with-coverage
+
+after_success:
+  - codecov
