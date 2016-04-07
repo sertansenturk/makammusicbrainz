@@ -1,97 +1,108 @@
 import eyed3
-
 from attribute import *
-from workmetadata import getWorkMetadata
+from workmetadata import get_work_metadata
 
 import musicbrainzngs as mb
 mb.set_useragent("Makam corpus metadata", "0.1", "compmusic.upf.edu")
 
-def getAudioMetadata(audioIn, getWorkAttributes = None):
-    try:  # audio file input
-        mbid, duration, sampling_frequency, bit_rate = getFileMetadata(audioIn)
-        audioMetadata = {'mbid':mbid, 'path':audioIn, 'duration':duration, 
-            'sampling_frequency':sampling_frequency, 'bit_rate':bit_rate}
-    except IOError:
-        audioMetadata = {'mbid':mbid}
 
-    meta = mb.get_recording_by_id(audioMetadata['mbid'], 
-        includes=['artists','artist-rels','tags','releases','work-rels']
-        )['recording']
-    audioMetadata['title'] = meta['title']
+def get_audio_metadata(audio_in, get_work_attributes=None):
+    try:  # audio file input
+        mbid, duration, sampling_frequency, bit_rate = get_file_metadata(
+            audio_in)
+        audio_metadata = {'mbid': mbid, 'path': audio_in, 'duration': duration,
+                          'sampling_frequency': sampling_frequency,
+                          'bit_rate': bit_rate}
+    except IOError:
+        audio_metadata = {'mbid': audio_in}
+
+    meta = mb.get_recording_by_id(
+        audio_metadata['mbid'], includes=['artists', 'artist-rels', 'releases',
+                                          'tags', 'work-rels'])['recording']
+    audio_metadata['title'] = meta['title']
 
     # releases
-    audioMetadata['releases'] = getReleases(meta)
+    audio_metadata['releases'] = get_releases(meta)
 
     # artist credits
-    audioMetadata['artist_credits'] = getArtistCredits(meta)
+    audio_metadata['artist_credits'] = get_artist_credits(meta)
 
     # performers
-    audioMetadata['artists'] = getArtistRelations(meta)
-    
+    audio_metadata['artists'] = get_artist_relations(meta)
+
     # works
     if 'work-relation-list' in meta.keys():  # has work
-        audioMetadata['works'] = getWorks(meta)
+        audio_metadata['works'] = get_works(meta)
 
     # get makam/usul/for from work attributes
-    if getWorkAttributes and 'works' in audioMetadata.keys():
+    if get_work_attributes and 'works' in audio_metadata.keys():
         attribute_keys = ['makam', 'form', 'usul']
-        for w in audioMetadata['works']:
-            workMetadata = getWorkMetadata(w['mbid'])
+        for w in audio_metadata['works']:
+            work_metadata = get_work_metadata(w['mbid'])
             for ak in attribute_keys:
-                if ak not in audioMetadata.keys():
-                    audioMetadata[ak] = workMetadata[ak]
+                if ak not in audio_metadata.keys():
+                    audio_metadata[ak] = work_metadata[ak]
                 else:
-                    for wm in workMetadata[ak]:
-                        audioMetadata[ak].append(wm)
+                    for wm in work_metadata[ak]:
+                        audio_metadata[ak].append(wm)
 
     # get makam/usul/for tags
-    attributetags = getAttributeTags(meta)
+    attributetags = get_attrib_tags(meta)
     for key, vals in attributetags.iteritems():
         for val in vals:  # add the source
-            val['source'] = 'http://musicbrainz.org/recording/' + mbid
+            val['source'] = 'http://musicbrainz.org/recording/' + \
+                            audio_metadata['mbid']
 
-        if key not in audioMetadata.keys():
-            audioMetadata[key] = vals
+        if key not in audio_metadata.keys():
+            audio_metadata[key] = vals
         else:
             for val in vals:
-                audioMetadata[key].append(val)
+                audio_metadata[key].append(val)
 
-    return audioMetadata
+    return audio_metadata
 
-def getFileMetadata(file):
-    audiofile = eyed3.load(file)
-    mbid = audiofile.tag.unique_file_ids.get('http://musicbrainz.org').data[-36:]
+
+def get_file_metadata(filepath):
+    audiofile = eyed3.load(filepath)
+    mbid = audiofile.tag.unique_file_ids.get('http://musicbrainz.org').data[
+           -36:]
     duration = audiofile.info.time_secs
-    sampling_frequency = audiofile.info.sample_freq  
+    sampling_frequency = audiofile.info.sample_freq
     bit_rate = audiofile.info.mp3_header.bit_rate
 
     return mbid, duration, sampling_frequency, bit_rate
 
-def getReleases(meta):
-    return [{'title':rel['title'], 'mbid':rel['id']} for rel in meta['release-list']]
 
-def getArtistCredits(meta):
-    credits = []
+def get_releases(meta):
+    return [{'title': rel['title'], 'mbid': rel['id']} for rel in
+            meta['release-list']]
+
+
+def get_artist_credits(meta):
+    artist_credits = []
     for credit in meta['artist-credit']:
         try:
-            credits.append({'name':credit['artist']['name'],
-                'mbid':credit['artist']['id']})
+            artist_credits.append({'name': credit['artist']['name'],
+                                   'mbid': credit['artist']['id']})
         except TypeError:
             pass  # skip join phrase
 
-    return credits
+    return artist_credits
 
-def getArtistRelations(meta):
+
+def get_artist_relations(meta):
     artists = []
     if 'artist-relation-list' in meta.keys():
         for artist in meta['artist-relation-list']:
-            artists.append({'name':artist['artist']['name'], 
-                'mbid':artist['artist']['id'],'type':artist['type']})
-            if (artist['type'] in ['vocal', 'instrument'] and 
-               'attribute-list' in artist.keys()):
+            artists.append({'name': artist['artist']['name'],
+                            'mbid': artist['artist']['id'],
+                            'type': artist['type']})
+            is_performer = artist['type'] in ['vocal', 'instrument']
+            if is_performer and 'attribute-list' in artist.keys():
                 artists[-1]['attribute-list'] = artist['attribute-list']
     return artists
 
-def getWorks(meta):
-    return ([{'title':work['work']['title'], 'mbid':work['work']['id']} 
-        for work in meta['work-relation-list']])
+
+def get_works(meta):
+    return ([{'title': work['work']['title'], 'mbid': work['work']['id']}
+             for work in meta['work-relation-list']])
