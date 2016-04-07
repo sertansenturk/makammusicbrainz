@@ -10,7 +10,7 @@ class WorkMetadata(object):
     def __init__(self, print_warnings=None):
         self.print_warnings = print_warnings
 
-    def from_mbid(self, mbid):
+    def from_musicbrainz(self, mbid):
         work = mb.get_work_by_id(mbid, includes=['artist-rels',
                                                  'recording-rels'])['work']
 
