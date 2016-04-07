@@ -44,4 +44,3 @@ def _get_saved_meta(meta_type):
     saved_meta_file = os.path.join(_curr_folder, meta_type + '_meta.json')
     saved_meta = json.load(open(saved_meta_file, 'r'))
     return saved_meta
-
