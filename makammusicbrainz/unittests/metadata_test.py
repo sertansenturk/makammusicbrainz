@@ -8,11 +8,11 @@ _curr_folder = os.path.dirname(os.path.abspath(__file__))
 
 def test_audio_metadata():
     # get the recording metadata
-    audioMetadata = AudioMetadata(print_warnings=True)
+    audioMetadata = AudioMetadata(get_work_attributes=True,
+                                  print_warnings=True)
     mp3file = os.path.join(_curr_folder, '..', '..', 'sampledata',
                            'huzzam_fasil.mp3')
-    audio_meta = audioMetadata.from_musicbrainz(
-        mp3file, get_work_attributes=True)
+    audio_meta = audioMetadata.from_musicbrainz(mp3file)
 
     # load the metadata computed earlier
     saved_meta = _get_saved_meta('audio')
