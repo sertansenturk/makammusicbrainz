@@ -1,6 +1,8 @@
-from attribute import *
-import musicbrainzngs as mb
+from attribute import Attribute
+import os
+import json
 
+import musicbrainzngs as mb
 mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
 
 
@@ -22,21 +24,24 @@ class WorkMetadata(object):
             makam = [a['attribute'] for a in w_attrb if 'Makam' in a['type']]
             data['makam'] = [
                 {'mb_attribute': m,
-                 'attribute_key': get_attrib_key_from_mb_attrib(m, 'makam'),
+                 'attribute_key': Attribute.get_attrib_key_from_mb_attrib(
+                     m, 'makam'),
                  'source': 'http://musicbrainz.org/work/' + mbid}
                 for m in makam]
 
             form = [a['attribute'] for a in w_attrb if 'Form' in a['type']]
             data['form'] = [
                 {'mb_attribute': f,
-                 'attribute_key': get_attrib_key_from_mb_attrib(f, 'form'),
+                 'attribute_key': Attribute.get_attrib_key_from_mb_attrib(
+                     f, 'form'),
                  'source': 'http://musicbrainz.org/work/' + mbid}
                 for f in form]
 
             usul = [a['attribute'] for a in w_attrb if 'Usul' in a['type']]
             data['usul'] = [
                 {'mb_attribute': u,
-                 'attribute_key': get_attrib_key_from_mb_attrib(u, 'usul'),
+                 'attribute_key': Attribute.get_attrib_key_from_mb_attrib(
+                     u, 'usul'),
                  'source': 'http://musicbrainz.org/work/' + mbid}
                 for u in usul]
 

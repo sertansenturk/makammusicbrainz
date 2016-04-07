@@ -1,5 +1,5 @@
 import eyed3
-from attribute import *
+from attribute import Attribute
 from workmetadata import WorkMetadata
 
 import musicbrainzngs as mb
@@ -49,7 +49,7 @@ def get_audio_metadata(audio_in, get_work_attributes=None,
                         audio_metadata[ak].append(wm)
 
     # get makam/usul/for tags
-    attributetags = get_attrib_tags(meta)
+    attributetags = Attribute.get_attrib_tags(meta)
     for key, vals in attributetags.iteritems():
         for val in vals:  # add the source
             val['source'] = 'http://musicbrainz.org/recording/' + \
@@ -66,8 +66,8 @@ def get_audio_metadata(audio_in, get_work_attributes=None,
 
 def get_file_metadata(filepath):
     audiofile = eyed3.load(filepath)
-    mbid = audiofile.tag.unique_file_ids.get('http://musicbrainz.org').data[
-           -36:]
+    mbid = audiofile.tag.unique_file_ids.get(
+        'http://musicbrainz.org').data[-36:]
     duration = audiofile.info.time_secs
     sampling_frequency = audiofile.info.sample_freq
     bit_rate = audiofile.info.mp3_header.bit_rate
