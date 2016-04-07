@@ -1,12 +1,13 @@
 import eyed3
 from attribute import *
-from workmetadata import get_work_metadata
+from workmetadata import WorkMetadata
 
 import musicbrainzngs as mb
-mb.set_useragent("Makam corpus metadata", "0.1", "compmusic.upf.edu")
+mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
 
 
-def get_audio_metadata(audio_in, get_work_attributes=None):
+def get_audio_metadata(audio_in, get_work_attributes=None,
+                       print_warnings=None):
     try:  # audio file input
         mbid, duration, sampling_frequency, bit_rate = get_file_metadata(
             audio_in)
@@ -36,9 +37,10 @@ def get_audio_metadata(audio_in, get_work_attributes=None):
 
     # get makam/usul/for from work attributes
     if get_work_attributes and 'works' in audio_metadata.keys():
+        workMetadata = WorkMetadata(print_warnings=print_warnings)
         attribute_keys = ['makam', 'form', 'usul']
         for w in audio_metadata['works']:
-            work_metadata = get_work_metadata(w['mbid'])
+            work_metadata = workMetadata.from_mbid(w['mbid'])
             for ak in attribute_keys:
                 if ak not in audio_metadata.keys():
                     audio_metadata[ak] = work_metadata[ak]
