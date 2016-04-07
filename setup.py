@@ -12,4 +12,7 @@ setup(name='makammusicbrainz',
       url='http://sertansenturk.com',
       packages=['makammusicbrainz'],
       include_package_data=True,
+      install_requires=[
+            'eyeD3'
+      ],
       )
