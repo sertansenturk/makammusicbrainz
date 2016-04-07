@@ -26,17 +26,17 @@ class AudioMetadata(object):
         audio_meta['title'] = meta['title']
 
         # releases
-        audio_meta['releases'] = AudioMetadata.get_releases(meta)
+        audio_meta['releases'] = AudioMetadata._get_releases(meta)
 
         # artist credits
-        audio_meta['artist_credits'] = AudioMetadata.get_artist_credits(meta)
+        audio_meta['artist_credits'] = AudioMetadata._get_artist_credits(meta)
 
         # performers
-        audio_meta['artists'] = AudioMetadata.get_artist_relations(meta)
+        audio_meta['artists'] = AudioMetadata._get_artist_relations(meta)
 
         # works
         if 'work-relation-list' in meta.keys():  # has work
-            audio_meta['works'] = AudioMetadata.get_works(meta)
+            audio_meta['works'] = AudioMetadata._get_works(meta)
 
         # get makam/usul/for from work attributes
         if get_work_attributes and 'works' in audio_meta.keys():
@@ -52,6 +52,11 @@ class AudioMetadata(object):
                             audio_meta[ak].append(wm)
 
         # get makam/usul/for tags
+        self._get_recording_attribute_tags(audio_meta, meta)
+
+        return audio_meta
+
+    def _get_recording_attribute_tags(self, audio_meta, meta):
         attributetags = Attribute.get_attrib_tags(meta)
         for key, vals in attributetags.iteritems():
             for val in vals:  # add the source
@@ -63,8 +68,6 @@ class AudioMetadata(object):
             else:
                 for val in vals:
                     audio_meta[key].append(val)
-
-        return audio_meta
 
     @staticmethod
     def get_file_metadata(filepath):
@@ -78,12 +81,12 @@ class AudioMetadata(object):
         return mbid, duration, sampling_frequency, bit_rate
 
     @staticmethod
-    def get_releases(meta):
+    def _get_releases(meta):
         return [{'title': rel['title'], 'mbid': rel['id']} for rel in
                 meta['release-list']]
 
     @staticmethod
-    def get_artist_credits(meta):
+    def _get_artist_credits(meta):
         artist_credits = []
         for credit in meta['artist-credit']:
             try:
@@ -95,7 +98,7 @@ class AudioMetadata(object):
         return artist_credits
 
     @staticmethod
-    def get_artist_relations(meta):
+    def _get_artist_relations(meta):
         artists = []
         if 'artist-relation-list' in meta.keys():
             for artist in meta['artist-relation-list']:
@@ -108,6 +111,6 @@ class AudioMetadata(object):
         return artists
 
     @staticmethod
-    def get_works(meta):
+    def _get_works(meta):
         return ([{'title': work['work']['title'], 'mbid': work['work']['id']}
                  for work in meta['work-relation-list']])
