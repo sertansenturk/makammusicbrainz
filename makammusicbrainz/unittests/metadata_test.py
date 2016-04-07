@@ -15,7 +15,7 @@ def test_audio_metadata():
         mp3file, get_work_attributes=True)
 
     # load the metadata computed earlier
-    saved_meta = _get_saved_audio_meta()
+    saved_meta = _get_saved_meta('audio')
 
     # remove paths since they are both relative to something else
     audio_meta.pop("path", None)
@@ -26,7 +26,7 @@ def test_audio_metadata():
 
 def test_work_metadata():
     # load the audio metadata for the work mbids
-    audio_meta = _get_saved_audio_meta()
+    audio_meta = _get_saved_meta('audio')
 
     # get the work metadata
     workMetadata = WorkMetadata(print_warnings=True)
@@ -35,18 +35,13 @@ def test_work_metadata():
         work_meta.append(workMetadata.from_musicbrainz(w['mbid']))
 
     # load the metadata computed earlier
-    saved_meta = _get_saved_work_meta()
+    saved_meta = _get_saved_meta('work')
 
     assert work_meta == saved_meta
 
 
-def _get_saved_audio_meta():
-    saved_meta_file = os.path.join(_curr_folder, 'audio_meta.json')
+def _get_saved_meta(meta_type):
+    saved_meta_file = os.path.join(_curr_folder, meta_type + '_meta.json')
     saved_meta = json.load(open(saved_meta_file, 'r'))
     return saved_meta
 
-
-def _get_saved_work_meta():
-    saved_meta_file = os.path.join(_curr_folder, 'work_meta.json')
-    saved_meta = json.load(open(saved_meta_file, 'r'))
-    return saved_meta
