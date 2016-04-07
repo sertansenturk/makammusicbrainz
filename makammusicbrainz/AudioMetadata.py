@@ -7,10 +7,11 @@ mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
 
 
 class AudioMetadata(object):
-    def __init__(self, print_warnings=None):
+    def __init__(self, get_work_attributes=None, print_warnings=None):
         self.print_warnings = print_warnings
+        self.get_work_attributes = get_work_attributes
 
-    def from_musicbrainz(self, audio_in, get_work_attributes=None):
+    def from_musicbrainz(self, audio_in):
         try:  # audio file input
             mbid, duration, sampling_frequency, bit_rate = \
                 AudioMetadata.get_file_metadata(audio_in)
@@ -39,7 +40,7 @@ class AudioMetadata(object):
             audio_meta['works'] = AudioMetadata._get_works(meta)
 
         # get makam/usul/for from work attributes
-        if get_work_attributes and 'works' in audio_meta.keys():
+        if self.get_work_attributes and 'works' in audio_meta.keys():
             self._get_attributes_from_works(audio_meta)
 
         # get makam/usul/for tags
