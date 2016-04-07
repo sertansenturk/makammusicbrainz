@@ -27,7 +27,7 @@ Please refer to [demo.ipynb](https://github.com/sertansenturk/makammusicbrainz/b
 Installation
 ------------
 
-If you want to install makamusicbrainz, it is recommended to install makammetadata and dependencies into a virtualenv. In the terminal, do the following:
+If you want to install makammusicbrainz, it is recommended to install the package and its dependencies into a virtualenv. In the terminal, do the following:
 
     virtualenv env
     source env/bin/activate
