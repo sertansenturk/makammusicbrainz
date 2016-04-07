@@ -4,7 +4,7 @@
 Packages to fetch metadata related to the makam music recordings and works from MusicBrainz
 
 Usage
-============
+-----
 ```python
 # audio metadata
 from makammusicbrainz.AudioMetadata import AudioMetadata
@@ -25,7 +25,7 @@ work_meta = workMetadata.from_musicbrainz(mbid)
 Please refer to [demo.ipynb](https://github.com/sertansenturk/makammusicbrainz/blob/master/demo.ipynb) for an interactive demo.
 
 Installation
-============
+------------
 
 If you want to install makamusicbrainz, it is recommended to install makammetadata and dependencies into a virtualenv. In the terminal, do the following:
 
