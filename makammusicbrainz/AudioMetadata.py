@@ -7,7 +7,7 @@ mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
 
 
 class AudioMetadata(object):
-    def __init__(self, get_work_attributes=None, print_warnings=None):
+    def __init__(self, get_work_attributes=True, print_warnings=None):
         self.print_warnings = print_warnings
         self.get_work_attributes = get_work_attributes
 
