@@ -51,18 +51,11 @@ class WorkMetadata(object):
 
     def _chk_warnings(self, data):
         if self.print_warnings:
-            if not data['makam']:
-                print('http://musicbrainz.org/work/' + data['mbid'] +
-                      ' Makam is not entered!')
-            if not data['form']:
-                print('http://musicbrainz.org/work/' + data['mbid'] +
-                      ' Form is not entered!')
-            if not data['usul']:
-                print('http://musicbrainz.org/work/' + data['mbid'] +
-                      ' Usul is not entered!')
-            if not data['composer']:
-                print('http://musicbrainz.org/work/' + data['mbid'] +
-                      ' Composer is not entered!')
+            self._chk_data_key_exists(data, dkey='makam')
+            self._chk_data_key_exists(data, dkey='form')
+            self._chk_data_key_exists(data, dkey='usul')
+            self._chk_data_key_exists(data, dkey='composer')
+
             if 'language' not in data.keys():
                 if not data['lyricist']:
                     print('http://musicbrainz.org/work/' + data['mbid'] +
@@ -79,6 +72,11 @@ class WorkMetadata(object):
                     if not data['lyricist']:
                         print('http://musicbrainz.org/work/' + data['mbid'] +
                               'Lyricist is not entered!')
+
+    def _chk_data_key_exists(self, data, dkey):
+        if not data[dkey]:
+            print('http://musicbrainz.org/work/' + data['mbid'] + ' ' +
+                  dkey.title() + ' is not entered!')
 
     @staticmethod
     def _assign_recordings(data, work):
