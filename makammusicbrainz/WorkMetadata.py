@@ -7,12 +7,14 @@ mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
 
 
 class WorkMetadata(object):
-    def __init__(self, print_warnings=None):
+    def __init__(self, get_recording_rels=True, print_warnings=None):
+        self.get_recording_rels = get_recording_rels
         self.print_warnings = print_warnings
 
     def from_musicbrainz(self, mbid):
-        work = mb.get_work_by_id(mbid, includes=['artist-rels',
-                                                 'recording-rels'])['work']
+        included_rels = (['artist-rels', 'recording-rels']
+                        if self.get_recording_rels else ['artist-rels'])
+        work = mb.get_work_by_id(mbid, includes=included_rels)['work']
 
         data = ({'makam': [], 'form': [], 'usul': [], 'title': work['title'],
                  'mbid': mbid, 'composer': dict(), 'lyricist': dict()})
