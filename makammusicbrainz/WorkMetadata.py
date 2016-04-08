@@ -13,62 +13,34 @@ class WorkMetadata(object):
 
     def from_musicbrainz(self, mbid):
         included_rels = (['artist-rels', 'recording-rels']
-                        if self.get_recording_rels else ['artist-rels'])
+                         if self.get_recording_rels else ['artist-rels'])
         work = mb.get_work_by_id(mbid, includes=included_rels)['work']
 
         data = ({'makam': [], 'form': [], 'usul': [], 'title': work['title'],
                  'mbid': mbid, 'composer': dict(), 'lyricist': dict()})
 
-        # makam, form, usul attributes
-        if 'attribute-list' in work.keys():
-            w_attrb = work['attribute-list']
-
-            makam = [a['attribute'] for a in w_attrb if 'Makam' in a['type']]
-            data['makam'] = [
-                {'mb_attribute': m,
-                 'attribute_key': Attribute.get_attrib_key_from_mb_attrib(
-                     m, 'makam'),
-                 'source': 'http://musicbrainz.org/work/' + mbid}
-                for m in makam]
-
-            form = [a['attribute'] for a in w_attrb if 'Form' in a['type']]
-            data['form'] = [
-                {'mb_attribute': f,
-                 'attribute_key': Attribute.get_attrib_key_from_mb_attrib(
-                     f, 'form'),
-                 'source': 'http://musicbrainz.org/work/' + mbid}
-                for f in form]
-
-            usul = [a['attribute'] for a in w_attrb if 'Usul' in a['type']]
-            data['usul'] = [
-                {'mb_attribute': u,
-                 'attribute_key': Attribute.get_attrib_key_from_mb_attrib(
-                     u, 'usul'),
-                 'source': 'http://musicbrainz.org/work/' + mbid}
-                for u in usul]
+        # assign makam, form, usul attributes to data
+        self._assign_makam_form_usul(data, mbid, work)
 
         # language
-        if 'language' in work.keys():
-            data['language'] = work['language']
+        self._assign_language(data, work)
 
         # composer and lyricist
-        if 'artist-relation-list' in work.keys():
-            for a in work['artist-relation-list']:
-                if a['type'] == 'composer':
-                    data['composer'] = {'name': a['artist']['name'],
-                                        'mbid': a['artist']['id']}
-                elif a['type'] == 'lyricist':
-                    data['lyricist'] = {'name': a['artist']['name'],
-                                        'mbid': a['artist']['id']}
+        self._assign_composer_lyricist(data, work)
 
         # add recordings
-        data['recordings'] = []
-        if 'recording-relation-list' in work.keys():
-            for r in work['recording-relation-list']:
-                data['recordings'].append({'mbid': r['recording']['id'],
-                                           'title': r['recording']['title']})
+        self._assign_recordings(data, work)
 
         # add scores
+        self._add_scores(data, mbid)
+
+        # warnings
+        self._chk_warnings(data)
+
+        return data
+
+    @staticmethod
+    def _add_scores(data, mbid):
         score_work_file = os.path.join(os.path.dirname(
             os.path.abspath(__file__)), 'makam_data', 'symbTr_mbid.json')
         score_work = json.load(open(score_work_file, 'r'))
@@ -77,7 +49,7 @@ class WorkMetadata(object):
             if mbid in sw['uuid']:
                 data['scores'].append(sw['name'])
 
-        # warnings
+    def _chk_warnings(self, data):
         if self.print_warnings:
             if not data['makam']:
                 print('http://musicbrainz.org/work/' + data['mbid'] +
@@ -108,4 +80,43 @@ class WorkMetadata(object):
                         print('http://musicbrainz.org/work/' + data['mbid'] +
                               'Lyricist is not entered!')
 
-        return data
+    @staticmethod
+    def _assign_recordings(data, work):
+        data['recordings'] = []
+        if 'recording-relation-list' in work.keys():
+            for r in work['recording-relation-list']:
+                data['recordings'].append({'mbid': r['recording']['id'],
+                                           'title': r['recording']['title']})
+
+    @staticmethod
+    def _assign_composer_lyricist(data, work):
+        if 'artist-relation-list' in work.keys():
+            for a in work['artist-relation-list']:
+                if a['type'] == 'composer':
+                    data['composer'] = {'name': a['artist']['name'],
+                                        'mbid': a['artist']['id']}
+                elif a['type'] == 'lyricist':
+                    data['lyricist'] = {'name': a['artist']['name'],
+                                        'mbid': a['artist']['id']}
+
+    @staticmethod
+    def _assign_language(data, work):
+        if 'language' in work.keys():
+            data['language'] = work['language']
+
+    @classmethod
+    def _assign_makam_form_usul(cls, data, mbid, work):
+        if 'attribute-list' in work.keys():
+            w_attrb = work['attribute-list']
+            for attr_name in ['makam', 'form', 'usul']:
+                cls._assign_attr(data, mbid, w_attrb, attr_name)
+
+    @staticmethod
+    def _assign_attr(data, mbid, w_attrb, attrname):
+        attr = [a['attribute'] for a in w_attrb
+                if attrname.title() in a['type']]
+        data[attrname] = [
+            {'mb_attribute': m,
+             'attribute_key': Attribute.get_attr_key_from_mb_attr(m, attrname),
+             'source': 'http://musicbrainz.org/work/' + mbid}
+            for m in attr]
