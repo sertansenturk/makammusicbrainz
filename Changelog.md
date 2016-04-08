@@ -1,3 +1,7 @@
+#### makammusicbrainz v1.2.0
+ - Simplified WorkMetadata
+ - Minor I/O changes
+
 #### makammusicbrainz v1.1.0
  - Refactoring according to PEP8
  - Converted code from functional to object-oriented
