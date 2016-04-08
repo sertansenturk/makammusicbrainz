@@ -1,6 +1,7 @@
 from Attribute import Attribute
 import os
 import json
+import warnings
 
 import musicbrainzngs as mb
 mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
@@ -56,24 +57,33 @@ class WorkMetadata(object):
             self._chk_data_key_exists(data, dkey='usul')
             self._chk_data_key_exists(data, dkey='composer')
 
-            if 'language' not in data.keys():
-                if not data['lyricist']:
-                    print('http://musicbrainz.org/work/' + data['mbid'] +
-                          'Language is not entered!')
-                else:
-                    print('http://musicbrainz.org/work/' + data['mbid'] +
-                          'Language of the vocal work is not entered!')
-            else:
-                if data['language'] == "zxx":  # no lyics
-                    if data['lyricist']:
-                        print('http://musicbrainz.org/work/' + data['mbid'] +
-                              'Lyricist is entered to the instrumental work!')
-                else:
-                    if not data['lyricist']:
-                        print('http://musicbrainz.org/work/' + data['mbid'] +
-                              'Lyricist is not entered!')
+            if 'language' in data.keys():  # language entered to MusicBrainz
+                self._chk_lyricist(data)
+            else:  # no lyrics information in MusicBrainz
+                self._chk_language(data)
 
-    def _chk_data_key_exists(self, data, dkey):
+    def _chk_language(self, data):
+        if data['lyricist']:  # lyricist available
+            warnings.warn('http://musicbrainz.org/work/' +
+                          data['mbid'] + 'Language of the vocal work '
+                                         'is not entered!')
+        else:
+            warnings.warn('http://musicbrainz.org/work/' +
+                          data['mbid'] + 'Language is not entered!')
+
+    def _chk_lyricist(self, data):
+        if data['language'] == "zxx":  # no lyrics
+            if data['lyricist']:
+                warnings.warn('http://musicbrainz.org/work/' +
+                              data['mbid'] + 'Lyricist is entered to '
+                                             'the instrumental work!')
+        else:  # has lyrics
+            if not data['lyricist']:
+                warnings.warn('http://musicbrainz.org/work/' +
+                              data['mbid'] + "Lyricist isn't entered!")
+
+    @staticmethod
+    def _chk_data_key_exists(data, dkey):
         if not data[dkey]:
             print('http://musicbrainz.org/work/' + data['mbid'] + ' ' +
                   dkey.title() + ' is not entered!')
@@ -99,12 +109,12 @@ class WorkMetadata(object):
         if 'language' in work.keys():
             data['language'] = work['language']
 
-    @classmethod
-    def _assign_makam_form_usul(cls, data, mbid, work):
+    @staticmethod
+    def _assign_makam_form_usul(data, mbid, work):
         if 'attribute-list' in work.keys():
             w_attrb = work['attribute-list']
             for attr_name in ['makam', 'form', 'usul']:
-                cls._assign_attr(data, mbid, w_attrb, attr_name)
+                WorkMetadata._assign_attr(data, mbid, w_attrb, attr_name)
 
     @staticmethod
     def _assign_attr(data, mbid, w_attrb, attrname):
