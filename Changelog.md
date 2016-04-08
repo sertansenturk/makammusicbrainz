@@ -1,5 +1,6 @@
 #### makammusicbrainz v1.2.0
- - Simplified WorkMetadata
+ - Improved code quality
+ - Modularized WorkMetadata
  - Minor I/O changes
 
 #### makammusicbrainz v1.1.0
