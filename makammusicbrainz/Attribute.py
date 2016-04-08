@@ -43,5 +43,6 @@ class Attribute(object):
             if k not in attributes.keys():  # create the key
                 attributes[k] = []
 
-            attributes[k].append({'mb_tag': val, 'attribute_key':
-                Attribute._get_attr_key_from_mb_tag(val, k)})
+            attributes[k].append(
+                {'mb_tag': val, 'attribute_key':
+                    Attribute._get_attr_key_from_mb_tag(val, k)})
