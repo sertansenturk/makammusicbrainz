@@ -4,7 +4,7 @@ import json
 import warnings
 
 import musicbrainzngs as mb
-mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
+mb.set_useragent("Makam corpus metadata", "1.2.0", "compmusic.upf.edu")
 
 
 class WorkMetadata(object):

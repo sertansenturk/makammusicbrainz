@@ -3,7 +3,7 @@ from . Attribute import Attribute
 from . WorkMetadata import WorkMetadata
 
 import musicbrainzngs as mb
-mb.set_useragent("Makam corpus metadata", "1.1", "compmusic.upf.edu")
+mb.set_useragent("Makam corpus metadata", "1.2.0", "compmusic.upf.edu")
 
 
 class AudioMetadata(object):
