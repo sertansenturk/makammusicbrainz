@@ -92,12 +92,9 @@ class WorkMetadata(object):
     def _assign_composer_lyricist(data, work):
         if 'artist-relation-list' in work.keys():
             for a in work['artist-relation-list']:
-                if a['type'] == 'composer':
-                    data['composer'] = {'name': a['artist']['name'],
-                                        'mbid': a['artist']['id']}
-                elif a['type'] == 'lyricist':
-                    data['lyricist'] = {'name': a['artist']['name'],
-                                        'mbid': a['artist']['id']}
+                if a['type'] in ['composer', 'lyricist']:
+                    data[a['type']] = {'name': a['artist']['name'],
+                                       'mbid': a['artist']['id']}
 
     @staticmethod
     def _assign_language(data, work):
