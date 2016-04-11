@@ -13,6 +13,6 @@ setup(name='makammusicbrainz',
       packages=['makammusicbrainz'],
       include_package_data=True,
       install_requires=[
-            'eyeD3'
+            'eyeD3 == 0.7.9'
       ],
       )
