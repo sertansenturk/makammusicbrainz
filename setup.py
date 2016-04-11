@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='makammusicbrainz',
-      version='1.2.1',
+      version='1.2.2',
       description='Tools fetch metadata related to the CompMusic makam corpus '
                   'from MusicBrainz',
       author='Sertan Senturk',

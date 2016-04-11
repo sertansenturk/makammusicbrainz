@@ -118,8 +118,8 @@ class WorkMetadata(object):
 
     @staticmethod
     def _assign_attr(data, mbid, w_attrb, attrname):
-        attr = [a['attribute'] for a in w_attrb
-                if attrname.title() in a['type']]
+        attr = [a['value'] for a in w_attrb
+                if attrname.title() in a['attribute']]
         data[attrname] = [
             {'mb_attribute': m,
              'attribute_key': Attribute.get_attr_key_from_mb_attr(m, attrname),
