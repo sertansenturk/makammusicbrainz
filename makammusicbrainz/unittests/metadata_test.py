@@ -17,7 +17,7 @@ def test_recording_mbid_metadata():
     # load the metadata computed earlier
     saved_meta = _get_saved_meta(mbid + '.json')
 
-    assert audio_meta == saved_meta
+    assert mbid_meta == saved_meta
 
 
 def test_audio_metadata():
@@ -55,6 +55,6 @@ def test_work_metadata():
 
 
 def _get_saved_meta(meta_type):
-    saved_meta_file = os.path.join(_curr_folder, meta_type
+    saved_meta_file = os.path.join(_curr_folder, meta_type)
     saved_meta = json.load(open(saved_meta_file, 'r'))
     return saved_meta
