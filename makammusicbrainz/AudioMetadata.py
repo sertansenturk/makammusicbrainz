@@ -3,7 +3,7 @@ from . Attribute import Attribute
 from . WorkMetadata import WorkMetadata
 
 import musicbrainzngs as mb
-mb.set_useragent("Makam corpus metadata", "1.2.0", "compmusic.upf.edu")
+mb.set_useragent("Makam corpus metadata", "1.2.1", "compmusic.upf.edu")
 
 
 class AudioMetadata(object):
@@ -18,7 +18,7 @@ class AudioMetadata(object):
             audio_meta = {'mbid': mbid, 'path': audio_in, 'duration': duration,
                           'sampling_frequency': sampling_frequency,
                           'bit_rate': bit_rate}
-        except IOError:
+        except (IOError, AttributeError):
             audio_meta = {'mbid': audio_in}
 
         meta = mb.get_recording_by_id(

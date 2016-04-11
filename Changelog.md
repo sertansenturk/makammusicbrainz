@@ -1,3 +1,6 @@
+#### makammusicbrainz v1.2.1
+ - Fixed mbid input for audio metadata
+
 #### makammusicbrainz v1.2.0
  - Improved code quality
  - Modularized WorkMetadata
