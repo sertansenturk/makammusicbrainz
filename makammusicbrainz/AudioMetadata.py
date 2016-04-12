@@ -26,17 +26,17 @@ class AudioMetadata(object):
         audio_meta['title'] = meta['title']
 
         # releases
-        audio_meta['releases'] = AudioMetadata._get_releases(meta)
+        audio_meta['releases'] = self._get_releases(meta)
 
         # artist credits
-        audio_meta['artist_credits'] = AudioMetadata._get_artist_credits(meta)
+        audio_meta['artist_credits'] = self._get_artist_credits(meta)
 
         # performers
-        audio_meta['artists'] = AudioMetadata._get_artist_relations(meta)
+        audio_meta['artists'] = self._get_artist_relations(meta)
 
         # works
         if 'work-relation-list' in meta.keys():  # has work
-            audio_meta['works'] = AudioMetadata._get_works(meta)
+            audio_meta['works'] = self._get_works(meta)
 
         # get makam/usul/for from work attributes
         if self.get_work_attributes and 'works' in audio_meta.keys():
