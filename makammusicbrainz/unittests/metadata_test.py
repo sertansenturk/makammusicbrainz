@@ -22,11 +22,11 @@ def test_recording_mbid_metadata():
 
 def test_audio_metadata():
     # get the recording metadata
-    audioMetadata = AudioMetadata(get_work_attributes=True,
+    audio_metadata = AudioMetadata(get_work_attributes=True,
                                   print_warnings=True)
     mp3file = os.path.join(_curr_folder, '..', '..', 'sampledata',
                            'huzzam_fasil.mp3')
-    audio_meta = audioMetadata.from_musicbrainz(mp3file)
+    audio_meta = audio_metadata.from_musicbrainz(mp3file)
 
     # load the metadata computed earlier
     saved_meta = _get_saved_meta('audio_meta.json')
@@ -43,10 +43,10 @@ def test_work_metadata():
     audio_meta = _get_saved_meta('audio_meta.json')
 
     # get the work metadata
-    workMetadata = WorkMetadata(print_warnings=True)
+    work_metadata = WorkMetadata(print_warnings=True)
     work_meta = []
     for w in audio_meta['works']:
-        work_meta.append(workMetadata.from_musicbrainz(w['mbid']))
+        work_meta.append(work_metadata.from_musicbrainz(w['mbid']))
 
     # load the metadata computed earlier
     saved_meta = _get_saved_meta('work_meta.json')

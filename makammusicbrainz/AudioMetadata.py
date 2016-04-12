@@ -48,15 +48,15 @@ class AudioMetadata(object):
         return audio_meta
 
     def _get_attributes_from_works(self, audio_meta):
-        workMetadata = WorkMetadata(print_warnings=self.print_warnings)
+        work_metadata = WorkMetadata(print_warnings=self.print_warnings)
         attribute_keys = ['makam', 'form', 'usul']
         for w in audio_meta['works']:
-            work_metadata = workMetadata.from_musicbrainz(w['mbid'])
+            work_meta = work_metadata.from_musicbrainz(w['mbid'])
             for ak in attribute_keys:
                 if ak not in audio_meta.keys():
-                    audio_meta[ak] = work_metadata[ak]
+                    audio_meta[ak] = work_meta[ak]
                 else:
-                    for wm in work_metadata[ak]:
+                    for wm in work_meta[ak]:
                         audio_meta[ak].append(wm)
 
     @staticmethod
