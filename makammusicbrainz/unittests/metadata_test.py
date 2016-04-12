@@ -8,11 +8,11 @@ _curr_folder = os.path.dirname(os.path.abspath(__file__))
 
 def test_recording_mbid_metadata():
     # get the recording metadata
-    audioMetadata = AudioMetadata(get_work_attributes=True,
-                                  print_warnings=True)
+    audio_metadata = AudioMetadata(get_work_attributes=True,
+                                   print_warnings=True)
     mbid = '5cbd1b2d-d1ef-4627-a4d4-135a95de2b69'
 
-    mbid_meta = audioMetadata.from_musicbrainz(mbid)
+    mbid_meta = audio_metadata.from_musicbrainz(mbid)
 
     # load the metadata computed earlier
     saved_meta = _get_saved_meta(mbid + '.json')
@@ -23,7 +23,7 @@ def test_recording_mbid_metadata():
 def test_audio_metadata():
     # get the recording metadata
     audio_metadata = AudioMetadata(get_work_attributes=True,
-                                  print_warnings=True)
+                                   print_warnings=True)
     mp3file = os.path.join(_curr_folder, '..', '..', 'sampledata',
                            'huzzam_fasil.mp3')
     audio_meta = audio_metadata.from_musicbrainz(mp3file)
