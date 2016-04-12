@@ -2,6 +2,8 @@ import eyed3
 from . Attribute import Attribute
 from . WorkMetadata import WorkMetadata
 import musicbrainzngs as mb
+import logging
+logging.basicConfig(level=logging.INFO)
 mb.set_useragent("Makam corpus metadata", "1.2.1", "compmusic.upf.edu")
 
 
@@ -97,7 +99,7 @@ class AudioMetadata(object):
                 artist_credits.append({'name': credit['artist']['name'],
                                        'mbid': credit['artist']['id']})
             except TypeError:
-                pass  # skip join phrase
+                logging.debug('skip join phrase')
 
         return artist_credits
 
