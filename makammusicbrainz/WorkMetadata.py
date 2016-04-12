@@ -62,7 +62,8 @@ class WorkMetadata(object):
             else:  # no lyrics information in MusicBrainz
                 self._chk_language(data)
 
-    def _chk_language(self, data):
+    @staticmethod
+    def _chk_language(data):
         if data['lyricist']:  # lyricist available
             warnings.warn('http://musicbrainz.org/work/' +
                           data['mbid'] + 'Language of the vocal work '
@@ -71,7 +72,8 @@ class WorkMetadata(object):
             warnings.warn('http://musicbrainz.org/work/' +
                           data['mbid'] + 'Language is not entered!')
 
-    def _chk_lyricist(self, data):
+    @staticmethod
+    def _chk_lyricist(data):
         if data['language'] == "zxx":  # no lyrics
             if data['lyricist']:
                 warnings.warn('http://musicbrainz.org/work/' +
@@ -109,12 +111,12 @@ class WorkMetadata(object):
         if 'language' in work.keys():
             data['language'] = work['language']
 
-    @staticmethod
-    def _assign_makam_form_usul(data, mbid, work):
+    @classmethod
+    def _assign_makam_form_usul(cls, data, mbid, work):
         if 'attribute-list' in work.keys():
             w_attrb = work['attribute-list']
             for attr_name in ['makam', 'form', 'usul']:
-                WorkMetadata._assign_attr(data, mbid, w_attrb, attr_name)
+                cls._assign_attr(data, mbid, w_attrb, attr_name)
 
     @staticmethod
     def _assign_attr(data, mbid, w_attrb, attrname):

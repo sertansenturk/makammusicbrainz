@@ -1,2 +1,2 @@
 eyeD3 == 0.7.9
-git+https://github.com/alastair/python-musicbrainzngs.git@v0.6#egg=musicbrainzngs-master
+git+https://github.com/alastair/python-musicbrainzngs.git@v0.6#egg=musicbrainzngs
