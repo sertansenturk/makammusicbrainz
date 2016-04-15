@@ -2,6 +2,7 @@ import eyed3
 from . Attribute import Attribute
 from . WorkMetadata import WorkMetadata
 import musicbrainzngs as mb
+from six import iteritems
 import logging
 logging.basicConfig(level=logging.INFO)
 mb.set_useragent("Makam corpus metadata", "1.2.1", "compmusic.upf.edu")
@@ -64,7 +65,7 @@ class AudioMetadata(object):
     @staticmethod
     def _get_recording_attribute_tags(audio_meta, meta):
         attributetags = Attribute.get_attrib_tags(meta)
-        for key, vals in attributetags.iteritems():
+        for key, vals in iteritems(attributetags):
             for val in vals:  # add the source
                 val['source'] = 'http://musicbrainz.org/recording/' + \
                                 audio_meta['mbid']
