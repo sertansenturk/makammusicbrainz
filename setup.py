@@ -13,7 +13,7 @@ setup(name='makammusicbrainz',
       packages=['makammusicbrainz'],
       include_package_data=True,
       install_requires=[
-            'six>=1.10.0'  # Python 2*3 support
+            'six >= 1.10.0',  # Python 2*3 support
             'eyeD3 == 0.7.9',
       ],
       )
