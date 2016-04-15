@@ -22,6 +22,7 @@ class AudioMetadata(object):
                           'bit_rate': bit_rate}
         except (IOError, AttributeError):
             audio_meta = {'mbid': audio_in}
+        audio_meta['url'] = 'http://musicbrainz.org/work/' + audio_meta['mbid']
 
         meta = mb.get_recording_by_id(
             audio_meta['mbid'], includes=['artists', 'artist-rels', 'releases',

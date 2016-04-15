@@ -17,8 +17,9 @@ class WorkMetadata(object):
                          if self.get_recording_rels else ['artist-rels'])
         work = mb.get_work_by_id(mbid, includes=included_rels)['work']
 
-        data = ({'makam': [], 'form': [], 'usul': [], 'title': work['title'],
-                 'mbid': mbid, 'composer': dict(), 'lyricist': dict()})
+        data = {'makam': [], 'form': [], 'usul': [], 'title': work['title'],
+                'mbid': mbid, 'composer': dict(), 'lyricist': dict(),
+                'url': 'http://musicbrainz.org/work/' + mbid, 'language': ''}
 
         # assign makam, form, usul attributes to data
         self._assign_makam_form_usul(data, mbid, work)

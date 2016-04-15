@@ -17,7 +17,7 @@ def test_recording_mbid_metadata():
     # load the metadata computed earlier
     saved_meta = _get_saved_meta(mbid + '.json')
 
-    assert mbid_meta == saved_meta
+    assert mbid_meta == saved_meta, 'test_recording_mbid_metadata failed'
 
 
 def test_audio_metadata():
@@ -35,7 +35,7 @@ def test_audio_metadata():
     audio_meta.pop("path", None)
     saved_meta.pop("path", None)
 
-    assert audio_meta == saved_meta
+    assert audio_meta == saved_meta, 'test_audio_metadata failed'
 
 
 def test_work_metadata():
@@ -51,7 +51,7 @@ def test_work_metadata():
     # load the metadata computed earlier
     saved_meta = _get_saved_meta('work_meta.json')
 
-    assert work_meta == saved_meta
+    assert work_meta == saved_meta, 'test_work_metadata failed'
 
 
 def _get_saved_meta(meta_type):
