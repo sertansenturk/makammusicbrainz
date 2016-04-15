@@ -1,2 +1,3 @@
 eyeD3 == 0.7.9
+six>=1.10.0  # Python 2*3 support
 git+https://github.com/alastair/python-musicbrainzngs.git@v0.6#egg=musicbrainzngs

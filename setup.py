@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='makammusicbrainz',
-      version='1.2.3dev',
+      version='1.2.2',
       description='Tools fetch metadata related to the CompMusic makam corpus '
                   'from MusicBrainz',
       author='Sertan Senturk',
@@ -13,6 +13,7 @@ setup(name='makammusicbrainz',
       packages=['makammusicbrainz'],
       include_package_data=True,
       install_requires=[
+            'six>=1.10.0'  # Python 2*3 support
             'eyeD3 == 0.7.9',
       ],
       )
