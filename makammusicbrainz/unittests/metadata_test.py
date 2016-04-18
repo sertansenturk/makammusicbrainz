@@ -1,5 +1,5 @@
-from makammusicbrainz.AudioMetadata import AudioMetadata
-from makammusicbrainz.WorkMetadata import WorkMetadata
+from makammusicbrainz.audiometadata import AudioMetadata
+from makammusicbrainz.workmetadata import WorkMetadata
 import json
 import os
 

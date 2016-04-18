@@ -1,6 +1,6 @@
 import eyed3
-from . Attribute import Attribute
-from . WorkMetadata import WorkMetadata
+from . attribute import Attribute
+from . workmetadata import WorkMetadata
 import musicbrainzngs as mb
 from six import iteritems
 import logging

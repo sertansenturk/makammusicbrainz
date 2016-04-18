@@ -1,4 +1,4 @@
-from . Attribute import Attribute
+from . attribute import Attribute
 import os
 import json
 import warnings
