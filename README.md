@@ -7,7 +7,7 @@ Usage
 -----
 ```python
 # audio metadata
-from makammusicbrainz.AudioMetadata import AudioMetadata
+from makammusicbrainz.audiometadata import AudioMetadata
 audioMetadata = AudioMetadata(get_work_attributes=True, print_warnings=True)
 
 audio_meta = audioMetadata.from_musicbrainz(rec_input)
@@ -16,7 +16,7 @@ You can either supply recording MBID or recording filepath as the `rec_input`
 
 ```python
 # work metadata 
-from makammusicbrainz.WorkMetadata import WorkMetadata
+from makammusicbrainz.workmetadata import WorkMetadata
 workMetadata = WorkMetadata(print_warnings=True)
 
 work_meta = workMetadata.from_musicbrainz(mbid)

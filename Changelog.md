@@ -2,6 +2,7 @@
  - Fixed attribute assignment due to the output changes introduced in
  [musicbrainzngs v0.6](https://github.com/alastair/python-musicbrainzngs/releases/tag/v0.6)
  - Froze the requirement versions.
+ - Changed the module names according to PEP8 conventions
 
 #### makammusicbrainz v1.2.1
  - Fixed mbid input for audio metadata
