@@ -6,7 +6,10 @@ from six import iteritems
 import logging
 logging.basicConfig(level=logging.INFO)
 mb.set_useragent("Makam corpus metadata", "1.2.1", "compmusic.upf.edu")
-
+try:
+    eyed3.utils.log.log.setLevel(logging.ERROR)
+except AttributeError:
+    eyed3.log.setLevel("ERROR")
 
 class AudioMetadata(object):
     def __init__(self, get_work_attributes=True, print_warnings=None):
