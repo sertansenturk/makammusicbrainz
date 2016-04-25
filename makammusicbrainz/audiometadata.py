@@ -11,6 +11,7 @@ try:
 except AttributeError:
     eyed3.log.setLevel("ERROR")
 
+
 class AudioMetadata(object):
     def __init__(self, get_work_attributes=True, print_warnings=None):
         self.print_warnings = print_warnings
