@@ -66,30 +66,29 @@ class WorkMetadata(object):
     @staticmethod
     def _chk_language(data):
         if data['lyricist']:  # lyricist available
-            warnings.warn('http://musicbrainz.org/work/' +
-                          data['mbid'] + 'Language of the vocal work '
-                                         'is not entered!')
+            warnings.warn(u'http://musicbrainz.org/work/{0:s} Language of the '
+                          u'vocal work is not entered!'.format(data['mbid']))
         else:
-            warnings.warn('http://musicbrainz.org/work/' +
-                          data['mbid'] + 'Language is not entered!')
+            warnings.warn(u'http://musicbrainz.org/work/{0:s} Language is not '
+                          u'entered!'.format(data['mbid']))
 
     @staticmethod
     def _chk_lyricist(data):
         if data['language'] == "zxx":  # no lyrics
             if data['lyricist']:
-                warnings.warn('http://musicbrainz.org/work/' +
-                              data['mbid'] + 'Lyricist is entered to '
-                                             'the instrumental work!')
+                warnings.warn(
+                    u'http://musicbrainz.org/work/{0:s} Lyricist is entered '
+                    u'to the instrumental work!'.format(data['mbid']))
         else:  # has lyrics
             if not data['lyricist']:
-                warnings.warn('http://musicbrainz.org/work/' +
-                              data['mbid'] + "Lyricist isn't entered!")
+                warnings.warn(u'http://musicbrainz.org/work/{0:s} Lyricist is '
+                              u'not entered!'.format(data['mbid']))
 
     @staticmethod
     def _chk_data_key_exists(data, dkey):
         if not data[dkey]:
-            print('http://musicbrainz.org/work/' + data['mbid'] + ' ' +
-                  dkey.title() + ' is not entered!')
+            warnings.warn(u'http://musicbrainz.org/work/{0:s} {1:s} is not '
+                          u'entered!'.format(data['mbid'], dkey.title()))
 
     @staticmethod
     def _assign_recordings(data, work):
