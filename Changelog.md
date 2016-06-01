@@ -1,3 +1,6 @@
+#### makammusicbrainz v1.3.0
+ - Improved warnings
+
 #### makammusicbrainz v1.2.2
  - Fixed attribute assignment due to the output changes introduced in
  [musicbrainzngs v0.6](https://github.com/alastair/python-musicbrainzngs/releases/tag/v0.6)
