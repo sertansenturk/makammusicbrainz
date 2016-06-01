@@ -67,28 +67,31 @@ class WorkMetadata(object):
     def _chk_language(data):
         if data['lyricist']:  # lyricist available
             warnings.warn(u'http://musicbrainz.org/work/{0:s} Language of the '
-                          u'vocal work is not entered!'.format(data['mbid']))
+                          u'vocal work is not entered!'.format(data['mbid']),
+                          stacklevel=2)
         else:
             warnings.warn(u'http://musicbrainz.org/work/{0:s} Language is not '
-                          u'entered!'.format(data['mbid']))
+                          u'entered!'.format(data['mbid']), stacklevel=2)
 
     @staticmethod
     def _chk_lyricist(data):
         if data['language'] == "zxx":  # no lyrics
             if data['lyricist']:
-                warnings.warn(
-                    u'http://musicbrainz.org/work/{0:s} Lyricist is entered '
-                    u'to the instrumental work!'.format(data['mbid']))
+                warnings.warn(u'http://musicbrainz.org/work/{0:s} Lyricist is '
+                              u'entered to the instrumental work!'.
+                              format(data['mbid']), stacklevel=2)
         else:  # has lyrics
             if not data['lyricist']:
                 warnings.warn(u'http://musicbrainz.org/work/{0:s} Lyricist is '
-                              u'not entered!'.format(data['mbid']))
+                              u'not entered!'.format(data['mbid']),
+                              stacklevel=2)
 
     @staticmethod
     def _chk_data_key_exists(data, dkey):
         if not data[dkey]:
             warnings.warn(u'http://musicbrainz.org/work/{0:s} {1:s} is not '
-                          u'entered!'.format(data['mbid'], dkey.title()))
+                          u'entered!'.format(data['mbid'], dkey.title()),
+                          stacklevel=2)
 
     @staticmethod
     def _assign_recordings(data, work):
