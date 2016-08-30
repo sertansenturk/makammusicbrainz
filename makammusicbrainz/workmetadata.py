@@ -1,7 +1,7 @@
 from . attribute import Attribute
-import os
 import json
 import warnings
+import urllib
 
 import musicbrainzngs as mb
 mb.set_useragent("Makam corpus metadata", "1.2.0", "compmusic.upf.edu")
@@ -43,9 +43,10 @@ class WorkMetadata(object):
 
     @staticmethod
     def _add_scores(data, mbid):
-        score_work_file = os.path.join(os.path.dirname(
-            os.path.abspath(__file__)), 'makam_data', 'symbTr_mbid.json')
-        score_work = json.load(open(score_work_file, 'r'))
+        score_work_url = 'https://raw.githubusercontent.com/MTG/SymbTr/' \
+                         'master/symbTr_mbid.json'
+        response = urllib.urlopen(score_work_url)
+        score_work = json.loads(response.read())
         data['scores'] = []
         for sw in score_work:
             if mbid in sw['uuid']:
