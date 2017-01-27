@@ -1,6 +1,7 @@
 import eyed3
 from . attribute import Attribute
 from . workmetadata import WorkMetadata
+from . instrumentationvoicing import InstrumentationVoicing
 import musicbrainzngs as mb
 from six import iteritems
 import logging
@@ -57,6 +58,10 @@ class AudioMetadata(object):
 
         # get makam/usul/for tags
         self._get_recording_attribute_tags(audio_meta, meta)
+
+        # infer voicing/instrumentation
+        audio_meta['instrumentation_voicing'] = InstrumentationVoicing.\
+            get_voicing_instrumentation(audio_meta)
 
         return audio_meta
 
