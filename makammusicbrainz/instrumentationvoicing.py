@@ -77,21 +77,21 @@ class InstrumentationVoicing(object):
                 instrument_vocal_list.pop(ii)
 
         if cls.solo_instrumental(instrument_vocal_list):
-            return "Solo instrumental"
+            return "solo instrumental"
         elif cls.duo_instrumental(instrument_vocal_list):
-            return "Duo instrumental"
+            return "duo instrumental"
         elif cls.trio_instrumental(instrument_vocal_list):
-            return "Trio instrumental"
+            return "trio instrumental"
         elif cls.ensemble(instrument_vocal_list):
-            return "Ensemble instrumental"
+            return "ensemble instrumental"
         elif cls.solo_vocal_wo_acc(instrument_vocal_list):
-            return "Solo vocal without accompaniment"
+            return "solo vocal without accompaniment"
         elif cls.solo_vocal_w_acc(instrument_vocal_list):
-            return "Solo vocal with accompaniment"
+            return "solo vocal with accompaniment"
         elif cls.duet(instrument_vocal_list):
-            return "Duet"
+            return "duet"
         elif cls.choir(instrument_vocal_list):
-            return "Choir"
+            return "choir"
         else:
             assert False, "Unidentified voicing/instrumentation"
 
