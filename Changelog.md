@@ -1,3 +1,6 @@
+#### makammusicbrainz v1.4.0
+ - Added instrumentation/voicing field to audiometadata output
+
 #### makammusicbrainz v1.3.0
  - Improved warnings
 
