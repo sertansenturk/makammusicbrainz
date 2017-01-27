@@ -5,8 +5,12 @@ import musicbrainzngs as mb
 from six import iteritems
 import logging
 logging.basicConfig(level=logging.INFO)
+
+# set the agent to communicate with MusicBrainz
 mb.set_useragent("Makam corpus metadata", "1.2.1", "compmusic.upf.edu")
-try:
+
+# set logging to report on the error level
+try:  # handle different eyeD3 versions
     eyed3.utils.log.log.setLevel(logging.ERROR)
 except AttributeError:
     eyed3.log.setLevel("ERROR")
@@ -26,7 +30,8 @@ class AudioMetadata(object):
                           'bit_rate': bit_rate}
         except (IOError, AttributeError):
             audio_meta = {'mbid': audio_in}
-        audio_meta['url'] = 'http://musicbrainz.org/recording/' + audio_meta['mbid']
+        audio_meta['url'] = u'http://musicbrainz.org/recording/{}'.format(
+            audio_meta['mbid'])
 
         meta = mb.get_recording_by_id(
             audio_meta['mbid'], includes=['artists', 'artist-rels', 'releases',
