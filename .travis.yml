@@ -16,7 +16,7 @@ install:
 
 # command to run before the tests
 before_script:
-  - "flake8 makammusicbrainz --ignore=E501"
+  - "flake8 makammusicbrainz"
 
 # command to run tests
 script:
