@@ -1,3 +1,6 @@
+#### makammusicbrainz v1.4.1
+ - Made the eyeD3 requirement clear
+
 #### makammusicbrainz v1.4.0
  - Added instrumentation/voicing field to audiometadata output
 
